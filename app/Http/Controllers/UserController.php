@@ -86,7 +86,11 @@ class UserController extends Controller
         $user = User::findOrFail($username);
         return view('users.show', compact('user'));
     }
-
+    public function dashboard()
+    {
+        // Add your dashboard logic here
+        return view('users.dashboard');
+    }
     /**
      * Show the form for editing the specified user.
      *
