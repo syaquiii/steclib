@@ -1,53 +1,59 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h2>Register</h2>
 
-        <form action="{{ route('register') }}" method="POST">
-            @csrf
-            <div>
-                <label>Username</label>
-                <input type="text" name="username" value="{{ old('username') }}" required>
-            </div>
+    <section class="flex justify-between bg-[#EEE7D5] h-screen w-screen">
+        <div class="w-2/3 flex font-fraunces gap-y-4 flex-col justify-center items-center">
+            <h4 class="text-5xl font-bold text-[#1F305E]">Sign Up</h4>
+            <span class="text-[#1F305E]">Masuk dan mulai jelajahi koleksi buku kami.</span>
 
-            <div>
-                <label>Nama Lengkap</label>
-                <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required>
-            </div>
+            <form class="grid grid-cols-1 gap-4 w-1/3 place-items-center" action="{{ route('register') }}" method="POST">
+                @csrf
+                <input class="bg-[#F6F4F1] p-2 rounded-lg w-full" type="text" name="username" value="{{ old('username') }}"
+                    required placeholder="username">
+                @error('username')
+                    <span class="text-red-500 text-xs w-full text-left">{{ $message }}</span>
+                @enderror
 
-            <div>
-                <label>Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" required>
-            </div>
+                <input class="bg-[#F6F4F1] p-2 rounded-lg w-full" type="text" name="nama_lengkap"
+                    value="{{ old('nama_lengkap') }}" required placeholder="fullname">
+                @error('nama_lengkap')
+                    <span class="text-red-500 text-xs w-full text-left">{{ $message }}</span>
+                @enderror
 
-            <div>
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
+                <input class="bg-[#F6F4F1] p-2 rounded-lg w-full" type="email" name="email" value="{{ old('email') }}"
+                    required placeholder="email">
+                @error('email')
+                    <span class="text-red-500 text-xs w-full text-left">{{ $message }}</span>
+                @enderror
 
-            <div>
-                <label>Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" required>
-            </div>
+                <input class="bg-[#F6F4F1] p-2 rounded-lg w-full" type="password" name="password" required
+                    placeholder="password">
+                @error('password')
+                    <span class="text-red-500 text-xs w-full text-left">{{ $message }}</span>
+                @enderror
 
-            <div>
-                <label>Role</label>
-                <select name="is_admin" required>
-                    <option value="0">User</option>
-                    <option value="1">Admin</option>
-                </select>
-            </div>
+                <input class="bg-[#F6F4F1] p-2 rounded-lg w-full" type="password" name="password_confirmation" required
+                    placeholder="confirm password">
 
-            <button type="submit">Register</button>
-        </form>
+                <button class="bg-[#1F305E] text-white rounded-xl w-full py-2" type="submit">Register</button>
 
-        @if ($errors->any())
-            <div style="color:red;">
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
-    </div>
+                <div class="text-sm text-[#1F305E] w-full">
+                    Already have an account? <a href="{{ route('login') }}" class="underline">Login here</a>
+                </div>
+            </form>
+
+            @if ($errors->any())
+                <div class="text-red-500 w-1/3">
+                    @foreach ($errors->all() as $error)
+                        <div class="text-sm">{{ $error }}</div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <div class="w-1/3 h-full">
+            <img class="h-full w-full object-cover" src="{{ asset('images/regis.png') }}" alt="Register Image">
+        </div>
+    </section>
 @endsection

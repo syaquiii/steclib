@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\PenerbitController;
+
 use Illuminate\Support\Facades\Route;
 
 // Auth Routes
@@ -15,8 +16,10 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Admin Routes (Protected)
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    Route::resource('penerbit', PenerbitController::class);
 });
 
 Route::middleware(['auth', 'user'])->get('/users/home', function () {
