@@ -14,6 +14,11 @@
             <i class="fa-solid fa-person"></i>
             <li class="nav-item w-full">Manajemen Penerbit</li>
         </a>
+        <a href="{{ route('admin.user.index') }}"
+            class="{{ Request::routeIs('admin.user.index') ? 'bg-[#1F305E] text-white' : '' }} hover:bg-[#1F305E] hover:text-white transition-all px-8 py-4 flex justify-between text-xl gap-4 items-center">
+            <i class="fa-solid fa-person"></i>
+            <li class="nav-item w-full">Manajemen Anggota</li>
+        </a>
     </ul>
     <!-- Logout Button -->
     <form method="POST" action="{{ route('logout') }}" class="w-full mt-auto">

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\PenerbitController;
+use App\Http\Controllers\UserController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     Route::resource('penerbit', PenerbitController::class);
+
+    Route::get('/admin/user/{user}/edit', [UserController::class, 'edit'])->name('admin.user.edit');
+
+    Route::resource('user', UserController::class);
 });
 Route::get('/', function () {
     return view('page.home');
