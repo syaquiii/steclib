@@ -72,7 +72,7 @@ class UserController extends Controller
 
         User::create($userData);
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.user.index')
             ->with('success', 'User created successfully.');
     }
 
