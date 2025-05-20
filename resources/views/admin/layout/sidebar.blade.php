@@ -1,4 +1,4 @@
-<div class="h-screen w-1/5 flex rounded-r-2xl shadow-2xl flex-col items-center py-16 bg-[#F6F4F1]">
+<div class="h-screen w-1/5 fixed flex rounded-r-2xl shadow-2xl flex-col items-center py-16 bg-[#F6F4F1]">
     <div class="text-[#1F305E] font-fraunces italic">
         <h2 class="text-5xl font-bold">Steclib</h2>
         <span>Admin</span>
