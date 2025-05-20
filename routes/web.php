@@ -21,7 +21,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::resource('penerbit', PenerbitController::class);
 });
-
 Route::get('/', function () {
     return view('page.home');
-})->name('landing');
+})->name('page.home');

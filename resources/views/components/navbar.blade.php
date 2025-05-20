@@ -10,8 +10,9 @@
                 <li>Wishlist</li>
             </ul>
         </div>
-        <div>
+        <div class="flex items-center gap-4">
             @if(Auth::check())
+                <span class="text-[#1F305E] font-bold">{{ Auth::user()->username }}</span>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit">Logout</button>
@@ -22,6 +23,5 @@
                 </a>
             @endif
         </div>
-
     </div>
 </nav>
