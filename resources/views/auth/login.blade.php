@@ -9,8 +9,8 @@
 
         <!-- Login form on the RIGHT side -->
         <div class="w-2/3 flex font-fraunces gap-y-4 flex-col justify-center items-center">
-            <h4 class="text-5xl font-bold text-[#1F305E]">Login</h4>
-            <span class="text-[#1F305E]">Masukk dan lanjutkan petualangan membaca Anda.</span>
+            <h4 class="text-5xl font-bold text-[#1F305E]">Log in</h4>
+            <span class="text-[#1F305E]">Masuk dan lanjutkan petualangan membaca Anda.</span>
 
             <form class="grid grid-cols-1 gap-4 w-1/3 place-items-center" action="{{ route('login') }}" method="POST">
                 @csrf

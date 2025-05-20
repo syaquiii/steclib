@@ -1,7 +1,7 @@
 @extends('admin.layout.app')
 
 @section('content')
-    <div class="container bg-[#F6F4F1] p-6 rounded-lg shadow-lg">
+    <div class="container p-6 rounded-lg">
         @if(session('success'))
             <div class="alert alert-success mb-4">{{ session('success') }}</div>
         @endif
@@ -16,7 +16,7 @@
         </form>
 
         <!-- Table -->
-        <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+        <div class="overflow-x-auto bg-[#F6F4F1] rounded-lg shadow-md">
             <table class="w-full border-collapse">
                 <thead class="bg-[#1F305E] text-white">
                     <tr>
