@@ -21,6 +21,7 @@
                         <th class="px-6 py-3 text-left">Username</th>
                         <th class="px-6 py-3 text-left">Nama Lengkap</th>
                         <th class="px-6 py-3 text-left">Email</th>
+                        <th class="px-6 py-3 text-left">Jumlah Peminjaman</th>
                         <th class="px-6 py-3 text-left">Aksi</th>
                     </tr>
                 </thead>
@@ -30,6 +31,7 @@
                             <td class="px-6 py-4">{{ $user->username }}</td>
                             <td class="px-6 py-4">{{ $user->nama_lengkap }}</td>
                             <td class="px-6 py-4">{{ $user->email }}</td>
+                            <td class="px-6 py-4">{{ $user->peminjamans_count }}</td>
                             <td class="px-6 py-4 flex gap-2">
                                 <a href="{{ route('admin.user.edit', ['user' => $user->username]) }}"
                                     class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition flex items-center gap-2">

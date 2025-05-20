@@ -44,6 +44,8 @@ class Peminjaman extends Model
         'tanggal_wajib_kembali',
     ];
 
+    protected $table = 'peminjamans';
+
     /**
      * The attributes that should be cast.
      *
