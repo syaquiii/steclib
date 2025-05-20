@@ -35,7 +35,7 @@ class Penerbit extends Model
      *
      * @var bool
      */
-    public $incrementing = false;
+    public $incrementing = true;
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,6 @@ class Penerbit extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'id',
         'nama',
         'alamat',
     ];
