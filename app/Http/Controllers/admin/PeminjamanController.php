@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
 use App\Models\Buku;
 use App\Models\User;
@@ -19,8 +20,8 @@ class PeminjamanController extends Controller
      */
     public function index()
     {
-        $peminjamans = Peminjaman::with(['user', 'buku'])->get();
-        return view('peminjamans.index', compact('peminjamans'));
+        $peminjamans = Peminjaman::with(['user', 'buku'])->paginate(10);
+        return view('admin.peminjaman.index', compact('peminjamans'));
     }
 
     /**
@@ -32,7 +33,7 @@ class PeminjamanController extends Controller
     {
         $users = User::all();
         $books = Buku::all();
-        return view('peminjamans.create', compact('users', 'books'));
+        return view('admin.peminjaman.create', compact('users', 'books'));
     }
 
     /**
@@ -79,7 +80,7 @@ class PeminjamanController extends Controller
             'tanggal_wajib_kembali' => $request->tanggal_wajib_kembali,
         ]);
 
-        return redirect()->route('peminjamans.index')
+        return redirect()->route('admin.peminjaman.index')
             ->with('success', 'Borrowing record created successfully.');
     }
 
@@ -106,7 +107,7 @@ class PeminjamanController extends Controller
         $peminjaman = Peminjaman::findOrFail($id);
         $users = User::all();
         $books = Buku::all();
-        return view('peminjamans.edit', compact('peminjaman', 'users', 'books'));
+        return view('admin.peminjaman.edit', compact('peminjaman', 'users', 'books'));
     }
 
     /**
@@ -136,7 +137,7 @@ class PeminjamanController extends Controller
 
         $peminjaman->update($request->all());
 
-        return redirect()->route('peminjamans.index')
+        return redirect()->route('admin.peminjaman.index')
             ->with('success', 'Borrowing record updated successfully.');
     }
 

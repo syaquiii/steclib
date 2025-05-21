@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\PenerbitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\Admin\PeminjamanController;
 use Illuminate\Support\Facades\Route;
 
 // Auth Routes
@@ -29,6 +30,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('buku', BukuController::class);
     Route::get('/admin/buku/{buku}/edit', [BukuController::class, 'edit'])->name('admin.buku.edit');
     Route::put('/admin/buku/{buku}', [BukuController::class, 'update'])->name('admin.buku.update');
+
+    Route::resource('peminjaman', PeminjamanController::class);
+    Route::get('/admin/peminjaman/{peminjaman}/edit', [PeminjamanController::class, 'edit'])->name('admin.peminjaman.edit');
+    Route::put('/admin/peminjaman/{peminjaman}', [PeminjamanController::class, 'update'])->name('admin.peminjaman.update');
 });
 Route::get('/', function () {
     return view('page.home');
