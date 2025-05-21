@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Penerbit;
+use App\Models\Peminjaman;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PeminjamanController;
+
 
 class BukuController extends Controller
 {
@@ -100,9 +104,27 @@ class BukuController extends Controller
      */
     public function show($isbn)
     {
+
+
         $book = Buku::with('penerbit')->findOrFail($isbn);
+        $relatedBooks = Buku::where('id_penerbit', $book->id_penerbit)
+            ->where('isbn', '!=', $isbn)
+            ->take(4)
+            ->get();
         $reviews = $book->reviews()->with('user')->get();
-        return view('books.show', compact('book', 'reviews'));
+        $existingLoan = Auth::check() ? Peminjaman::where('username', Auth::user()->username)
+            ->where('isbn', $isbn)
+            ->whereNull('tanggal_kembali')
+            ->exists() : false;
+        $latestbooks = Buku::with('penerbit')
+            ->orderByDesc('tahun_terbit')
+            ->take(12)
+            ->get();
+
+
+        $reviewsOnIsbn = $reviews = Review::with('user')->where('isbn', $isbn)->get();
+        return view('books.index', compact('book', 'reviews', 'reviewsOnIsbn', 'relatedBooks', 'existingLoan', 'latestbooks'));
+
     }
 
     /**

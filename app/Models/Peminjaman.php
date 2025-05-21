@@ -70,7 +70,7 @@ class Peminjaman extends Model
      */
     public function buku()
     {
-        return $this->belongsTo(Buku::class, 'isbn', 'isbn');
+        return $this->belongsTo(Buku::class, 'isbn', 'isbn'); // pastikan nama kolom sesuai
     }
 
     /**
