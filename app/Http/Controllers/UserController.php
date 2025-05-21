@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -18,8 +19,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index', compact('users'));
+        $users = User::withCount('peminjamans')->paginate(10);
+        return view('admin.user.index', compact('users'));
     }
 
     /**
@@ -29,7 +30,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        return view('admin.user.create');
     }
 
     /**
@@ -71,7 +72,7 @@ class UserController extends Controller
 
         User::create($userData);
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.user.index')
             ->with('success', 'User created successfully.');
     }
 
@@ -100,6 +101,15 @@ class UserController extends Controller
     public function edit($username)
     {
         $user = User::findOrFail($username);
+
+        if(Auth::user()->is_admin) {
+            return view('admin.user.edit', compact('user'));
+        }
+
+        if (Auth::user()->username !== $username) {
+            return redirect()->route('users.index')->with('error', 'Unauthorized access.');
+        }
+
         return view('users.edit', compact('user'));
     }
 
