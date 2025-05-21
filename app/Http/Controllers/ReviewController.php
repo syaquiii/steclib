@@ -29,6 +29,11 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'username', 'username');
+    }
+
     public function create()
     {
         // Get users and books for dropdown options
@@ -46,45 +51,31 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
-            'username' => [
-                'required',
-                'string',
-                'max:20',
-                'exists:users,username'
-            ],
-            'isbn' => [
-                'required',
-                'string',
-                'max:20',
-                'exists:bukus,isbn',
-                // Ensure this username-isbn combination doesn't already exist
-                Rule::unique('reviews')->where(function ($query) use ($request) {
-                    return $query->where('username', $request->username)
-                        ->where('isbn', $request->isbn);
-                })
-            ],
+        $request->validate([
+            'isbn' => 'required|string|max:20|exists:bukus,isbn',
             'review' => 'required|string|max:255',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->route('reviews.create')
-                ->withErrors($validator)
-                ->withInput();
+        // Cek apakah pengguna sudah memberikan review untuk buku ini
+        $existingReview = Review::where('username', auth()->user()->username)
+            ->where('isbn', $request->isbn)
+            ->first();
+
+        if ($existingReview) {
+            return redirect()->back()
+                ->with('error', 'Anda sudah memberikan review untuk buku ini.');
         }
 
-        // Create new review
-        $review = new Review();
-        $review->username = $request->username;
-        $review->isbn = $request->isbn;
-        $review->review = $request->review;
-        $review->save();
+        // Simpan review baru
+        Review::create([
+            'username' => auth()->user()->username,
+            'isbn' => $request->isbn,
+            'review' => $request->review,
+        ]);
 
-        return redirect()->route('reviews.index')
-            ->with('success', 'Review created successfully.');
+        return redirect()->back()
+            ->with('success', 'Review berhasil ditambahkan.');
     }
-
     /**
      * Display the specified review.
      *
