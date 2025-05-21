@@ -21,7 +21,7 @@
 
             <div class="mb-4">
                 <label class="block text-[#1F305E] font-semibold mb-2">Nama Lengkap</label>
-                <input type="text" name="username" value="{{ old('nama_lengkap', $user->nama_lengkap) }}"
+                <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $user->nama_lengkap) }}"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F305E] focus:outline-none"
                     required>
                 @error('nama_lengkap') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
@@ -34,6 +34,22 @@
                     required>
                 @error('email') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
             </div>
+
+            <div class="mb-4">
+                <label class="block text-[#1F305E] font-semibold mb-2">Password</label>
+                <input type="password" name="password"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F305E] focus:outline-none">
+                @error('password') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-[#1F305E] font-semibold mb-2">Konfirmasi Password</label>
+                <input type="password" name="password_confirmation"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F305E] focus:outline-none">
+                @error('password_confirmation') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+            </div>
+
+            <input type="hidden" name="is_admin" value="{{ old('is_admin', $user->is_admin) }}">
 
             <div class="flex gap-4">
                 <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">

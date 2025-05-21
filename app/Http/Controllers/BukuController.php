@@ -18,8 +18,8 @@ class BukuController extends Controller
      */
     public function index()
     {
-        $books = Buku::with('penerbit')->get();
-        return view('books.index', compact('books'));
+        $bukus = Buku::with('penerbit')->paginate(10);
+        return view('admin.buku.index', compact('bukus'));
     }
 
     /**
@@ -30,7 +30,7 @@ class BukuController extends Controller
     public function create()
     {
         $publishers = Penerbit::all();
-        return view('books.create', compact('publishers'));
+        return view('admin.buku.create', compact('publishers'));
     }
 
     /**
@@ -71,7 +71,7 @@ class BukuController extends Controller
 
         Buku::create($bookData);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.buku.index')
             ->with('success', 'Book created successfully.');
     }
 
@@ -96,9 +96,9 @@ class BukuController extends Controller
      */
     public function edit($isbn)
     {
-        $book = Buku::findOrFail($isbn);
-        $publishers = Penerbit::all();
-        return view('books.edit', compact('book', 'publishers'));
+        $buku = Buku::findOrFail($isbn);
+        $penerbits = Penerbit::all();
+        return view('admin.buku.edit', compact('buku', 'penerbits'));
     }
 
     /**
@@ -110,10 +110,10 @@ class BukuController extends Controller
      */
     public function update(Request $request, $isbn)
     {
-        $book = Buku::findOrFail($isbn);
+        $buku = Buku::findOrFail($isbn);
 
         $validator = Validator::make($request->all(), [
-            'judul' => 'required|string|max:45',
+            'judul' => 'required|string|max:255',
             'pengarang' => 'required|string|max:45',
             'id_penerbit' => 'required|exists:penerbits,id',
             'cover' => 'nullable|image|max:2048', // max 2MB
@@ -134,8 +134,8 @@ class BukuController extends Controller
         // Handle file upload if a new cover is provided
         if ($request->hasFile('cover')) {
             // Delete old cover if exists
-            if ($book->cover) {
-                Storage::delete('public/' . $book->cover);
+            if ($buku->cover) {
+                Storage::delete('public/' . $buku->cover);
             }
 
             $file = $request->file('cover');
@@ -144,9 +144,9 @@ class BukuController extends Controller
             $bookData['cover'] = 'book_covers/' . $filename;
         }
 
-        $book->update($bookData);
+        $buku->update($bookData);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.buku.index')
             ->with('success', 'Book updated successfully.');
     }
 
@@ -162,7 +162,7 @@ class BukuController extends Controller
 
         // Check if the book has associated peminjamans
         if ($book->peminjamans()->count() > 0) {
-            return redirect()->route('books.index')
+            return redirect()->route('admin.buku.index')
                 ->with('error', 'Cannot delete book. It has associated borrowing records.');
         }
 
@@ -177,7 +177,7 @@ class BukuController extends Controller
 
         $book->delete();
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.buku.index')
             ->with('success', 'Book deleted successfully.');
     }
 
