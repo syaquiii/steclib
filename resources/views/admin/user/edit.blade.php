@@ -49,7 +49,14 @@
                 @error('password_confirmation') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
             </div>
 
-            <input type="hidden" name="is_admin" value="{{ old('is_admin', $user->is_admin) }}">
+            <div class="mb-4">
+                <label class="block text-[#1F305E] font-semibold mb-2">Apakah Admin</label>
+                <select name="is_admin"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F305E] focus:outline-none">
+                    <option value="1" {{ old('is_admin', $user->is_admin) == 1 ? 'selected' : '' }}>Ya</option>
+                    <option value="0" {{ old('is_admin', $user->is_admin) == 0 ? 'selected' : '' }}>Tidak</option>
+                </select>
+            </div>
 
             <div class="flex gap-4">
                 <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
