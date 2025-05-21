@@ -3,9 +3,21 @@
 @section('content')
     <div class="container bg-[#F6F4F1] p-6 rounded-lg shadow-lg">
         <h2 class="text-[#1F305E] text-4xl font-fraunces font-bold mb-6">Edit Anggota</h2>
-
         @if(session('success'))
-            <div class="bg-green-500 text-white p-3 rounded-lg mb-4">{{ session('success') }}</div>
+            <div
+                class="flex items-center justify-between p-4 mb-6 text-green-800 bg-green-100 border border-green-300 rounded-lg shadow-sm">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-sm font-medium">{{ session('success') }}</span>
+                </div>
+                <button type="button" onclick="this.parentElement.remove()" class="text-green-500 hover:text-green-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         @endif
 
         <form action="{{ route('admin.user.update', $user->username) }}" method="POST"
