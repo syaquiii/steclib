@@ -50,7 +50,7 @@ class BukuController extends Controller
             'cover' => 'required|image|max:2048', // max 2MB
             'sinopsis' => 'required|string',
             'tagline' => 'required|string|max:200',
-            'konten' => 'required|string|max:255',
+            'konten' => 'nullable|string|max:255',
             'tahun_terbit' => 'required|integer|min:1900|max:' . (date('Y') + 1),
         ]);
 
