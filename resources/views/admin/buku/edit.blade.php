@@ -34,8 +34,12 @@
                 @error('cover') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
 
                 @if(!empty($buku->cover))
-                    <div class="mt-2">
-                        <img src="{{ asset('storage/' . $buku->cover) }}" alt="Cover" class="w-24 h-auto rounded shadow">
+                    <div class="book-cover">
+                        @if($buku->cover)
+                            <img src="{{ asset('storage/' . $buku->cover) }}" alt="{{ $buku->judul }}" class="max-w-full h-auto">
+                        @else
+                            <img src="{{ asset('img/no-image.png') }}" alt="No Image Available" class="max-w-full h-auto">
+                        @endif
                     </div>
                 @endif
             </div>

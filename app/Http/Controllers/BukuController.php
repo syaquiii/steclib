@@ -7,6 +7,7 @@ use App\Models\Penerbit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class BukuController extends Controller
@@ -63,10 +64,26 @@ class BukuController extends Controller
 
         // Handle file upload for book cover
         if ($request->hasFile('cover')) {
-            $file = $request->file('cover');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/book_covers', $filename);
-            $bookData['cover'] = 'book_covers/' . $filename;
+            try {
+                $file = $request->file('cover');
+                $filename = time() . '_' . $file->getClientOriginalName();
+
+                // Store the file in the correct location
+                // Note: We need to manually create the directory structure if it doesn't exist
+                $path = $request->file('cover')->store('images/url', 'public');
+
+                // Log storage path
+                Log::info('File uploaded to: ' . $path);
+
+                // Store the path in the database without the 'public/' prefix
+                $bookData['cover'] = $path;
+
+            } catch (\Exception $e) {
+                Log::error('File upload error: ' . $e->getMessage());
+                return redirect()->back()
+                    ->withErrors(['cover' => 'Error uploading file: ' . $e->getMessage()])
+                    ->withInput();
+            }
         }
 
         Buku::create($bookData);
@@ -133,15 +150,27 @@ class BukuController extends Controller
 
         // Handle file upload if a new cover is provided
         if ($request->hasFile('cover')) {
-            // Delete old cover if exists
-            if ($buku->cover) {
-                Storage::delete('public/' . $buku->cover);
-            }
+            try {
+                // Delete old cover if exists
+                if ($buku->cover) {
+                    Storage::disk('public')->delete($buku->cover);
+                }
 
-            $file = $request->file('cover');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/book_covers', $filename);
-            $bookData['cover'] = 'book_covers/' . $filename;
+                // Store the file in the correct location
+                $path = $request->file('cover')->store('images/url', 'public');
+
+                // Log storage path
+                Log::info('File updated to: ' . $path);
+
+                // Store the path in the database
+                $bookData['cover'] = $path;
+
+            } catch (\Exception $e) {
+                Log::error('File update error: ' . $e->getMessage());
+                return redirect()->back()
+                    ->withErrors(['cover' => 'Error updating file: ' . $e->getMessage()])
+                    ->withInput();
+            }
         }
 
         $buku->update($bookData);
@@ -168,7 +197,7 @@ class BukuController extends Controller
 
         // Delete cover image if exists
         if ($book->cover) {
-            Storage::delete('public/' . $book->cover);
+            Storage::disk('public')->delete($book->cover);
         }
 
         // Delete associated wishlists and reviews
