@@ -6,7 +6,8 @@
             <div class="alert alert-success mb-4">{{ session('success') }}</div>
         @endif
 
-        <form action="{{ route('admin.buku.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
+        <form action="{{ route('admin.buku.store') }}" method="POST" enctype="multipart/form-data"
+            class="bg-white p-6 rounded-lg shadow-md">
             @csrf
 
             <div class="mb-4">
@@ -36,8 +37,10 @@
                         @error('cover') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
                     <div class="w-40">
-                        <div class="border border-gray-300 rounded-lg h-40 w-32 flex items-center justify-center overflow-hidden">
-                            <img id="cover-preview" src="{{ asset('img/no-image.png') }}" alt="Cover Preview" class="max-h-full max-w-full">
+                        <div
+                            class="border border-gray-300 rounded-lg h-40 w-32 flex items-center justify-center overflow-hidden">
+                            <img id="cover-preview" src="{{ asset('img/no-image.png') }}" alt="Cover Preview"
+                                class="max-h-full max-w-full">
                         </div>
                     </div>
                 </div>
@@ -53,7 +56,7 @@
 
             <div class="mb-4">
                 <label class="block text-[#1F305E] font-semibold mb-2">Penerbit</label>
-                <select name="id_penerbit" 
+                <select name="id_penerbit"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F305E] focus:outline-none"
                     required>
                     <option value="">-- Pilih Penerbit --</option>
@@ -68,7 +71,8 @@
 
             <div class="mb-4">
                 <label class="block text-[#1F305E] font-semibold mb-2">Tahun Terbit</label>
-                <input type="number" name="tahun_terbit" value="{{ old('tahun_terbit') }}" min="1900" max="{{ date('Y') + 1 }}"
+                <input type="number" name="tahun_terbit" value="{{ old('tahun_terbit') }}" min="1900"
+                    max="{{ date('Y') + 1 }}"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F305E] focus:outline-none"
                     required>
                 @error('tahun_terbit') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
@@ -110,26 +114,35 @@
         </form>
     </div>
 
-    @push('scripts')
+@endsection
+
+@push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const coverUpload = document.getElementById('cover-upload');
             const coverPreview = document.getElementById('cover-preview');
-            
-            coverUpload.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        coverPreview.src = e.target.result;
+
+            // Check if the elements exist in the DOM
+            if (coverUpload && coverPreview) {
+                coverUpload.addEventListener('change', function () {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            coverPreview.src = e.target.result;
+                        }
+
+                        reader.readAsDataURL(this.files[0]);
+                    } else {
+                        coverPreview.src = "{{ asset('img/no-image.png') }}";
                     }
-                    
-                    reader.readAsDataURL(this.files[0]);
-                } else {
-                    coverPreview.src = "{{ asset('img/no-image.png') }}";
-                }
-            });
+                });
+
+                // Log to check that event listener is attached
+                console.log('Image preview functionality initialized');
+            } else {
+                console.error('Cover upload or preview elements not found');
+            }
         });
     </script>
-    @endpush
-@endsection
+@endpush
