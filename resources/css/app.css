@@ -57,10 +57,16 @@
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
+     --color-ourblue: #1F305E;
+     --color-brown-custom : #EEE7D5;
 }
 
 
 .regis{
     background-image: url("../assets//regis.png");
     @apply object-center
+}
+
+html, body {
+    overflow-x: hidden;
 }

@@ -72,7 +72,7 @@ class UserController extends Controller
 
         User::create($userData);
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.user.index')
             ->with('success', 'User created successfully.');
     }
 
@@ -102,7 +102,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($username);
 
-        if(Auth::user()->is_admin) {
+        if (Auth::user()->is_admin) {
             return view('admin.user.edit', compact('user'));
         }
 
@@ -169,7 +169,7 @@ class UserController extends Controller
 
         $user->update($userData);
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.user.index')
             ->with('success', 'User updated successfully.');
     }
 
@@ -181,7 +181,8 @@ class UserController extends Controller
      */
     public function destroy($username)
     {
-        $user = User::findOrFail($username);
+        $user = User::where('username', $username)->firstOrFail();
+
 
         // Delete profile photo if exists
         if ($user->foto_profil) {

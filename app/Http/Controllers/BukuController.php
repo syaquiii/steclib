@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Penerbit;
+use App\Models\Peminjaman;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PeminjamanController;
+
 
 class BukuController extends Controller
 {
@@ -18,8 +23,8 @@ class BukuController extends Controller
      */
     public function index()
     {
-        $books = Buku::with('penerbit')->get();
-        return view('books.index', compact('books'));
+        $bukus = Buku::with('penerbit')->paginate(10);
+        return view('admin.buku.index', compact('bukus'));
     }
 
     /**
@@ -30,7 +35,7 @@ class BukuController extends Controller
     public function create()
     {
         $publishers = Penerbit::all();
-        return view('books.create', compact('publishers'));
+        return view('admin.buku.create', compact('publishers'));
     }
 
     /**
@@ -49,7 +54,7 @@ class BukuController extends Controller
             'cover' => 'required|image|max:2048', // max 2MB
             'sinopsis' => 'required|string',
             'tagline' => 'required|string|max:200',
-            'konten' => 'required|string|max:255',
+            'konten' => 'nullable|string|max:255',
             'tahun_terbit' => 'required|integer|min:1900|max:' . (date('Y') + 1),
         ]);
 
@@ -63,15 +68,31 @@ class BukuController extends Controller
 
         // Handle file upload for book cover
         if ($request->hasFile('cover')) {
-            $file = $request->file('cover');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/book_covers', $filename);
-            $bookData['cover'] = 'book_covers/' . $filename;
+            try {
+                $file = $request->file('cover');
+                $filename = time() . '_' . $file->getClientOriginalName();
+
+                // Store the file in the correct location
+                // Note: We need to manually create the directory structure if it doesn't exist
+                $path = $request->file('cover')->store('images/url', 'public');
+
+                // Log storage path
+                Log::info('File uploaded to: ' . $path);
+
+                // Store the path in the database without the 'public/' prefix
+                $bookData['cover'] = $path;
+
+            } catch (\Exception $e) {
+                Log::error('File upload error: ' . $e->getMessage());
+                return redirect()->back()
+                    ->withErrors(['cover' => 'Error uploading file: ' . $e->getMessage()])
+                    ->withInput();
+            }
         }
 
         Buku::create($bookData);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.buku.index')
             ->with('success', 'Book created successfully.');
     }
 
@@ -83,9 +104,27 @@ class BukuController extends Controller
      */
     public function show($isbn)
     {
+
+
         $book = Buku::with('penerbit')->findOrFail($isbn);
+        $relatedBooks = Buku::where('id_penerbit', $book->id_penerbit)
+            ->where('isbn', '!=', $isbn)
+            ->take(4)
+            ->get();
         $reviews = $book->reviews()->with('user')->get();
-        return view('books.show', compact('book', 'reviews'));
+        $existingLoan = Auth::check() ? Peminjaman::where('username', Auth::user()->username)
+            ->where('isbn', $isbn)
+            ->whereNull('tanggal_kembali')
+            ->exists() : false;
+        $latestbooks = Buku::with('penerbit')
+            ->orderByDesc('tahun_terbit')
+            ->take(12)
+            ->get();
+
+
+        $reviewsOnIsbn = $reviews = Review::with('user')->where('isbn', $isbn)->get();
+        return view('books.index', compact('book', 'reviews', 'reviewsOnIsbn', 'relatedBooks', 'existingLoan', 'latestbooks'));
+
     }
 
     /**
@@ -96,9 +135,9 @@ class BukuController extends Controller
      */
     public function edit($isbn)
     {
-        $book = Buku::findOrFail($isbn);
-        $publishers = Penerbit::all();
-        return view('books.edit', compact('book', 'publishers'));
+        $buku = Buku::findOrFail($isbn);
+        $penerbits = Penerbit::all();
+        return view('admin.buku.edit', compact('buku', 'penerbits'));
     }
 
     /**
@@ -110,10 +149,10 @@ class BukuController extends Controller
      */
     public function update(Request $request, $isbn)
     {
-        $book = Buku::findOrFail($isbn);
+        $buku = Buku::findOrFail($isbn);
 
         $validator = Validator::make($request->all(), [
-            'judul' => 'required|string|max:45',
+            'judul' => 'required|string|max:255',
             'pengarang' => 'required|string|max:45',
             'id_penerbit' => 'required|exists:penerbits,id',
             'cover' => 'nullable|image|max:2048', // max 2MB
@@ -133,20 +172,32 @@ class BukuController extends Controller
 
         // Handle file upload if a new cover is provided
         if ($request->hasFile('cover')) {
-            // Delete old cover if exists
-            if ($book->cover) {
-                Storage::delete('public/' . $book->cover);
-            }
+            try {
+                // Delete old cover if exists
+                if ($buku->cover) {
+                    Storage::disk('public')->delete($buku->cover);
+                }
 
-            $file = $request->file('cover');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/book_covers', $filename);
-            $bookData['cover'] = 'book_covers/' . $filename;
+                // Store the file in the correct location
+                $path = $request->file('cover')->store('images/url', 'public');
+
+                // Log storage path
+                Log::info('File updated to: ' . $path);
+
+                // Store the path in the database
+                $bookData['cover'] = $path;
+
+            } catch (\Exception $e) {
+                Log::error('File update error: ' . $e->getMessage());
+                return redirect()->back()
+                    ->withErrors(['cover' => 'Error updating file: ' . $e->getMessage()])
+                    ->withInput();
+            }
         }
 
-        $book->update($bookData);
+        $buku->update($bookData);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.buku.index')
             ->with('success', 'Book updated successfully.');
     }
 
@@ -162,13 +213,13 @@ class BukuController extends Controller
 
         // Check if the book has associated peminjamans
         if ($book->peminjamans()->count() > 0) {
-            return redirect()->route('books.index')
+            return redirect()->route('admin.buku.index')
                 ->with('error', 'Cannot delete book. It has associated borrowing records.');
         }
 
         // Delete cover image if exists
         if ($book->cover) {
-            Storage::delete('public/' . $book->cover);
+            Storage::disk('public')->delete($book->cover);
         }
 
         // Delete associated wishlists and reviews
@@ -177,7 +228,7 @@ class BukuController extends Controller
 
         $book->delete();
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.buku.index')
             ->with('success', 'Book deleted successfully.');
     }
 

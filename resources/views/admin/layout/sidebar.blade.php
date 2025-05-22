@@ -9,6 +9,11 @@
             <i class="fa-solid fa-house"></i>
             <li class="nav-item w-full">Dashboard</li>
         </a>
+        <a href="{{ route('admin.peminjaman.index') }}"
+            class="{{ Request::routeIs('admin.peminjaman.index') ? 'bg-[#1F305E] text-white' : '' }} hover:bg-[#1F305E] hover:text-white transition-all px-8 py-4 flex justify-between gap-4 items-center">
+            <i class="fa-solid fa-person"></i>
+            <li class="nav-item w-full">Peminjaman</li>
+        </a>
         <a href="{{ route('admin.penerbit.index') }}"
             class="{{ Request::routeIs('admin.penerbit.index') ? 'bg-[#1F305E] text-white' : '' }} hover:bg-[#1F305E] hover:text-white transition-all px-8 py-4 flex justify-between gap-4 items-center">
             <i class="fa-solid fa-person"></i>
@@ -18,6 +23,11 @@
             class="{{ Request::routeIs('admin.user.index') ? 'bg-[#1F305E] text-white' : '' }} hover:bg-[#1F305E] hover:text-white transition-all px-8 py-4 flex justify-between gap-4 items-center">
             <i class="fa-solid fa-person"></i>
             <li class="nav-item w-full">Manajemen Anggota</li>
+        </a>
+        <a href="{{ route('admin.buku.index') }}"
+            class="{{ Request::routeIs('admin.buku.index') ? 'bg-[#1F305E] text-white' : '' }} hover:bg-[#1F305E] hover:text-white transition-all px-8 py-4 flex justify-between gap-4 items-center">
+            <i class="fa-solid fa-person"></i>
+            <li class="nav-item w-full">Manajemen Buku</li>
         </a>
     </ul>
     <!-- Logout Button -->
