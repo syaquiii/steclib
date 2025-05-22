@@ -32,6 +32,7 @@ class UserEditController extends Controller
             'is_admin' => 'required|boolean',
             'lokasi' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8|confirmed',
+            'bio' => 'nullable|string|max:255',
         ]);
 
         // Update data user
@@ -40,6 +41,14 @@ class UserEditController extends Controller
         $user->tanggal_lahir = $validated['tanggal_lahir'];
         $user->is_admin = $validated['is_admin'];
         $user->lokasi = $validated['lokasi'];
+        $user->bio = $validated['bio'];
+        // Update foto profil jika diisi
+        if ($request->hasFile('foto_profil')) {
+            $file = $request->file('foto_profil');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads'), $filename);
+            $user->foto_profil = 'uploads/' . $filename;
+        }
 
         // Update password jika diisi
         if (!empty($validated['password'])) {

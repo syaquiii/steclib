@@ -2,21 +2,20 @@
 <x-navbar />
 
 @section('content')
-<div class="grid grid-cols-2 min-h-screen pt-40">
-<div>
-    <div class="bg-[#635147] mr-0 w-1/2">
-    <h1>Profil</h1>
+<div class="container grid grid-cols-2 min-h-screen p-20">
+<div class="justify-center items-center flex">
+    <div class="bg-[#635147] mr-0 w-1/2 text-center text-white rounded-lg shadow-lg p-5">
     <div class="flex justify-center items-center">
-        <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Foto Profil" class="rounded-full w-32 h-32 mt-5">
+        <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Foto Profil" class="rounded-full w-48 h-48 mt-5">
     </div>
-    <p>{{ $user->nama_lengkap }}</p>
-    <p>@ {{ $user->username }}</p>
-    <p>{{ $user->bio }}</p>
+    <h1 class="text-2xl font-fraunces">{{ $user->nama_lengkap }}</h1>
+    <p class="font-fraunces">@ {{ $user->username }}</p>
+    <p class="text-sm pt-4">{{ $user->bio }}</p>
     </div>
 </div>
 
-<div class="container w-4/5 mx-auto mt-5 text-[#1F305E]">
-    <h2 class="text-2xl font-bold mb-4">Edit Profil</h2>
+<div class="container mx-auto mt-5 text-[#1F305E]">
+    <h2 class="text-2xl font-bold mb-4">Pengaturan Akun</h2>
 
     @if(session('success'))
         <div class="bg-green-100 text-green-800 p-2 rounded mb-3">
