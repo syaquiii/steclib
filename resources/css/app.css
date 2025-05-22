@@ -46,7 +46,7 @@
 }
 
 @theme {
-    --font-segoe: "Segoe", 
+    --font-segoe: "Segoe";
     --font-frauces: "Fraunces",
     ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",

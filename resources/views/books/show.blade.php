@@ -58,12 +58,12 @@
             </div>
         </div>
         <!-- WHITE SPACE -->
-        <div class="w-full px-20 py-32 min-h-[40rem] gap-16 bg-white grid grid-cols-2 rounded-2xl shadow-2xl -mt-10">
+        <div class="w-full px-20 py-32 min-h-[40rem] gap-16 bg-[#F6F4F1] grid grid-cols-2 rounded-2xl shadow-2xl -mt-10">
             <div>
                 <h4 class="text-2xl font-fraunces text-ourblue font-bold mb-2">Sinopsis</h4>
                 <p class="text-xs text-justify">{{ $book->sinopsis }}</p>
                 <h4 class="mt-8 text-2xl font-fraunces text-ourblue font-bold">Review</h4>
-                <div class="h-[15rem] overflow-y-scroll relative p-1 flex  flex-col  gap-10">
+                <div class="h-[15rem] overflow-y-scroll relative p-1 flex  flex-col  gap-10" style="scrollbar-width: none; -ms-overflow-style: none;">
                     @foreach($reviewsOnIsbn as $review)
                         @include ('components.review-card')
                     @endforeach
@@ -135,4 +135,8 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('footer')
+<x-footer />
 @endsection

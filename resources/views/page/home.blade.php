@@ -18,7 +18,7 @@
                 </p>
 
                 {{-- CTA Button --}}
-                <button
+                <button onclick="window.location.href='{{ route('books.daftar') }}'"
                     class="mt-10 bg-ourblue text-white px-4 py-2 rounded-xl hover:scale-105 cursor-pointer hover:bg-blue-950 transition-all">
                     Mulai Meminjam
                 </button>
@@ -51,7 +51,7 @@
             </div>
 
             {{-- Right Content (optional) --}}
-            <div class="w-2/5 relative h-full pr-24 bg-white py-30">
+            <div class="w-2/5 relative pr-24 bg-[#F6F4F1] py-30">
                 {{-- Placeholder content --}}
                 <div class=" h-full ">
                     <img class="absolute top-8 -left-[15rem]" src="{{ asset('images/buku.png') }}" alt="">
@@ -67,7 +67,7 @@
                     <!-- REVIEWS -->
                     <div class="mt-10 pl-20 pr-10 pt-32 h-screen ">
                         <h2 class="text-2xl font-fraunces text-ourblue mb-4">Review Terbaru</h2>
-                        <div class="h-[30rem] overflow-y-scroll relative p-1 flex  flex-col  gap-10">
+                        <div class="h-[30rem] overflow-y-scroll relative p-1 flex  flex-col  gap-10" style="scrollbar-width: none; -ms-overflow-style: none;">
                             @foreach($reviews as $review)
                                 @include ('components.review-card')
                             @endforeach
@@ -78,4 +78,8 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('footer')
+    <x-footer />
 @endsection

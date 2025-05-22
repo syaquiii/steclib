@@ -41,3 +41,8 @@
     </div>
 
 </section>
+@endsection
+
+@section('footer')
+<x-footer />
+@endsection
