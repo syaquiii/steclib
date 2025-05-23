@@ -12,6 +12,7 @@ use App\Http\Controllers\PeminjamanController as UserPeminjamanController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserBukuController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserEditController;
 
 // Auth Routes
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -76,3 +77,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 });
+
+Route::get('/profile', [UserEditController::class, 'edit'])->name('user.profile');
+Route::post('/profile', [UserEditController::class, 'update'])->name('profile.update');

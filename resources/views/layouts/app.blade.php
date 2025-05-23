@@ -9,8 +9,12 @@
 
 </head>
 
-<body class="h-full bg-[#EEE7D5]">
+<body class="min-h-screen flex flex-col bg-[#EEE7D5]">
+    <main class="flex-1">
     @yield('content')
+    </main>
+
+    @yield('footer')
 </body>
 
 </html>

@@ -2,7 +2,7 @@
 <x-navbar />
 
 @section('content')
-    <div class="p-40">
+    <div class="p-40 h-min-screen">
         <h1 class="mb-6 text-3xl font-bold text-[#1F305E]">My Wishlist</h1>
 
         @if(session('success'))
@@ -69,4 +69,8 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('footer')
+    <x-footer />
 @endsection

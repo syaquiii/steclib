@@ -6,25 +6,25 @@
             <ul class="flex gap-10 items-center">
                 <li>
                     <a href="{{ route('page.home') }}"
-                        class="{{ request()->routeIs('page.home') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-gray-700 hover:text-ourblue' }}">
+                        class="{{ request()->routeIs('page.home') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-[#635147] hover:text-ourblue' }}">
                         Beranda
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('books.daftar') }}"
-                        class="{{ request()->routeIs('books.daftar') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-gray-700 hover:text-ourblue' }}">
+                        class="{{ request()->routeIs('books.daftar') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-[#635147] hover:text-ourblue' }}">
                         Daftar Buku
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('peminjaman.index') }}"
-                        class="{{ request()->routeIs('peminjaman.index') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-gray-700 hover:text-ourblue' }}">
+                        class="{{ request()->routeIs('peminjaman.index') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-[#635147] hover:text-ourblue' }}">
                         Daftar Pinjaman
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('wishlists.index') }}"
-                        class="{{ request()->routeIs('wishlists.index') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-gray-700 hover:text-ourblue' }}">
+                        class="{{ request()->routeIs('wishlists.index') ? 'text-ourblue border-b-2 font-bold border-b-ourblue' : 'text-[#635147] hover:text-ourblue' }}">
                         Wishlist
                     </a>
                 </li>
@@ -32,7 +32,7 @@
         </div>
         <div class="flex items-center gap-4">
             @if(Auth::check())
-                <span class="text-[#1F305E] font-bold">{{ Auth::user()->username }}</span>
+                <a href="{{ route('user.profile') }}"><span class="text-[#1F305E] font-bold">{{ Auth::user()->username }}</span></a>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="text-red-600 hover:underline">Logout</button>

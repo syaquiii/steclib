@@ -50,14 +50,25 @@ class UserBukuController extends Controller
             ->where('isbn', '!=', $isbn)
             ->take(4)
             ->get();
-        $bookInWishlist = Wishlist::where('username', auth()->user()->username)
+
+        $bookInWishlist = false;
+        $existingLoan = false;
+
+        if (Auth::check()) {
+        $username = auth()->user()->username;
+        
+        $bookInWishlist = Wishlist::where('username', $username)
             ->where('isbn', $isbn)
             ->exists();
-        $reviews = $book->reviews()->with('user')->get();
-        $existingLoan = Auth::check() ? Peminjaman::where('username', Auth::user()->username)
+
+        $existingLoan = Peminjaman::where('username', $username)
             ->where('isbn', $isbn)
             ->whereNull('tanggal_kembali')
-            ->exists() : false;
+            ->exists();
+        }
+
+        $reviews = $book->reviews()->with('user')->get();
+
         $latestbooks = Buku::with('penerbit')
             ->orderByDesc('tahun_terbit')
             ->take(6) // ambil 4 terbaru (atau sesuaikan)

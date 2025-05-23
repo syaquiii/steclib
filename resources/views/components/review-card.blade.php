@@ -5,7 +5,7 @@
     <div class="ml-2 flex gap-4">
         <div>
 
-            <div class="h-10 ml-2 w-10 rounded-full bg-amber-50"></div>
+            <div class="h-10 ml-2 w-10 rounded-full bg-white"></div>
         </div>
         <div>
             <h2 class="text-sm text-ourblue font-bold">{{ $review->user->username }}</h2>
