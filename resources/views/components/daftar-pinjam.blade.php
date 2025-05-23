@@ -1,7 +1,7 @@
 <div class="flex gap-10">
     <div class="w-1/4">
         <img src="{{ asset('storage/' . $peminjaman->buku->cover) }}" alt="{{ $peminjaman->buku->judul }}"
-            class="w-full h-full object-cover rounded-md mb-2 shadow-md">
+            class="w-full aspect-[2/3] object-cover rounded-md mb-2 shadow-md">
     </div>
     <div class="w-2/4">
         <h4 class="font-fraunces text-ourblue font-bold mb-2 text-xl">{{ $peminjaman->buku->judul }}</h4>
