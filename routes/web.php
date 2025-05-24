@@ -70,13 +70,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlists/book/{isbn}', [WishlistController::class, 'bookWishlists'])->name('wishlists.book');
     Route::get('/wishlists/check/{isbn}', [WishlistController::class, 'checkStatus'])->name('wishlists.check');
 
-
+    Route::get('/profile', [UserEditController::class, 'edit'])->name('user.profile');
+    Route::put('/profile', [UserEditController::class, 'update'])->name('profile.update');
     Route::get('/my-books', [UserPeminjamanController::class, 'index'])->name('peminjaman.index');
     Route::post('/my-books/{id}/return', [UserPeminjamanController::class, 'returnRequest'])->name('peminjaman.return');
     Route::get('/my-penalties', [PeminjamanController::class, 'penalties'])->name('peminjaman.penalties');
 
 
 });
-
-Route::get('/profile', [UserEditController::class, 'edit'])->name('user.profile');
-Route::post('/profile', [UserEditController::class, 'update'])->name('profile.update');
