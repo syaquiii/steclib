@@ -6,7 +6,11 @@
 <div class="justify-center items-center flex">
     <div class="bg-[#635147] mr-0 w-1/2 text-center text-white rounded-lg shadow-lg p-5">
     <div class="flex justify-center items-center">
-        <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Foto Profil" class="rounded-full w-48 h-48 mt-5">
+        <img 
+            src="{{ $user->foto_profil ? asset('storage/' . $user->foto_profil) : asset('storage/images/default-profile.jpg') }}" 
+            alt="Foto Profil" 
+            class="rounded-full w-48 h-48 mt-5"
+        >
     </div>
     <h1 class="text-2xl font-fraunces">{{ $user->nama_lengkap }}</h1>
     <p class="font-fraunces">@ {{ $user->username }}</p>
@@ -64,13 +68,10 @@
 
         <div>
             <label for="is_admin" class="block font-semibold">Role</label>
-            <select name="is_admin" class="bg-[#F6F4F1] w-full p-2 rounded-lg @error('role') border-red-500 @enderror">
-                <option value="1" {{ old('is_admin', $user->is_admin) == '1' ? 'selected' : '' }}>Admin</option>
-                <option value="0" {{ old('is_admin', $user->is_admin) == '0' ? 'selected' : '' }}>Anggota</option>
+            <select name="is_admin" disabled class="bg-[#F6F4F1] w-full p-2 rounded-lg text-gray-500 cursor-not-allowed">
+                <option value="1" {{ $user->is_admin == '1' ? 'selected' : '' }}>Admin</option>
+                <option value="0" {{ $user->is_admin == '0' ? 'selected' : '' }}>Anggota</option>
             </select>
-            @error('role')
-                <div class="text-red-500 text-sm">{{ $message }}</div>
-            @enderror
         </div>
 
         <div>
