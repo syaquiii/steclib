@@ -184,17 +184,31 @@ class WishlistController extends Controller
                 ->with('error', 'You must be logged in to remove books from your wishlist.');
         }
 
-        // Find and delete the wishlist entry
-        $wishlist = Wishlist::where('username', auth()->user()->username)
-            ->where('isbn', $isbn)
-            ->firstOrFail();
+        try {
+            $username = auth()->user()->username;
 
-        $wishlist->delete();
+            // Direct DB delete to ensure we're using the composite key properly
+            $deleted = Wishlist::where('isbn', $isbn)
+                ->where('username', $username)
+                ->delete();
 
-        return redirect()->route('wishlists.index')
-            ->with('success', 'Book removed from your wishlist.');
+            if ($deleted) {
+                return redirect()->route('wishlists.index')
+                    ->with('success', 'Book removed from your wishlist.');
+            } else {
+                return redirect()->route('wishlists.index')
+                    ->with('error', 'Could not find the book in your wishlist.');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error removing book from wishlist', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->route('wishlists.index')
+                ->with('error', 'An error occurred while removing the book from your wishlist.');
+        }
     }
-
     /**
      * Display users who have a specific book in their wishlist (admin only).
      *

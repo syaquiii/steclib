@@ -17,31 +17,35 @@ class Wishlist extends Model
     protected $table = 'wishlists';
 
     /**
-     * The primary key is composite, so we need to disable the default ID column.
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'isbn';
+
+    /**
+     * Indicates if the model's ID is auto-incrementing.
      *
      * @var bool
      */
     public $incrementing = false;
 
     /**
+     * The primary key type.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
         'username',
         'isbn',
     ];
-
-    /**
-     * Set the keys for the model.
-     *
-     * @return array
-     */
-    public function getKeyName()
-    {
-        return ['username', 'isbn'];
-    }
 
     /**
      * Get the user that owns the wishlist item.
@@ -57,5 +61,15 @@ class Wishlist extends Model
     public function buku()
     {
         return $this->belongsTo(Buku::class, 'isbn', 'isbn');
+    }
+
+    /**
+     * Override the getRouteKeyName method to ensure proper route model binding
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'isbn';
     }
 }

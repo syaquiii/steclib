@@ -10,12 +10,11 @@ class PenerbitController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
         $penerbits = Penerbit::where('nama', 'LIKE', "%{$search}%")
             ->orWhere('alamat', 'LIKE', "%{$search}%")
             ->paginate(10);
 
-        return view('admin.penerbit.index', compact('penerbits', 'search'));
+        return view('admin.penerbit.index', compact('penerbits', 'search', ));
     }
 
     public function create()
