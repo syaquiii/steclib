@@ -2,13 +2,30 @@
 <x-navbar />
 
 @section('content')
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+    @csrf
+    @method('PUT')
     <div class="container grid grid-cols-2 min-h-screen p-20">
         <div class="justify-center items-center flex">
             <div class="bg-[#635147] mr-0 w-1/2 text-center text-white rounded-lg shadow-lg p-5">
                 <div class="flex justify-center items-center">
-                    <img src="{{ $user->foto_profil ? asset('storage/' . $user->foto_profil) : asset('storage/images/default-profile.jpg') }}"
-                        alt="" class="rounded-full w-48 h-48 mt-5">
+                   <label for="foto_profil" class="group cursor-pointer">
+                        <div class="relative w-48 h-48">
+                            <!-- Gambar profil -->
+                            <img src="{{ $user->foto_profil ? asset('storage/' . $user->foto_profil) : asset('storage/images/default-profile.jpg') }}"
+                                alt="Foto Profil"
+                                class="rounded-full w-full h-full object-cover">
 
+                            <!-- Overlay saat hover -->
+                            <div
+                                class="absolute inset-0 bg-black bg-opacity-50 rounded-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span class="text-white font-semibold">Update Gambar</span>
+                            </div>
+                        </div>
+
+                        <!-- Input file (disembunyikan) -->
+                        <input type="file" id="foto_profil" name="foto_profil" class="hidden" accept="image/*">
+                    </label>
                 </div>
                 <h1 class="text-2xl font-fraunces">{{ $user->nama_lengkap }}</h1>
                 <p class="font-fraunces">@ {{ $user->username }}</p>
@@ -25,9 +42,6 @@
                 </div>
             @endif
 
-            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-                @csrf
-                @method('PUT')
                 <div class="grid grid-cols-2 gap-x-4 gap-y-8">
                     <div>
                         <label for="nama_lengkap" class="block font-semibold">Nama Lengkap</label>
@@ -83,14 +97,7 @@
                         @enderror
                     </div>
 
-                    <div>
-                        <label for="foto_profil" class="block font-semibold">Foto Profil</label>
-                        <input type="file" name="foto_profil" accept="image/*"
-                            class="bg-[#F6F4F1] w-full p-2 rounded-lg @error('foto_profil') border-red-500 @enderror">
-                        @error('foto_profil')
-                            <div class="text-red-500 text-sm">{{ $message }}</div>
-                        @enderror
-                    </div>
+            
 
                     <div>
                         <label for="password" class="block font-semibold">Password Baru (opsional)</label>
@@ -120,7 +127,7 @@
                     Simpan
                 </button>
                 <a href="{{ route('page.home') }}" class="ml-4 text-[#1F305E] hover:underline">Kembali</a>
-            </form>
         </div>
     </div>
+</form>
 @endsection
